@@ -19,13 +19,26 @@ const STATUS_COLORS: Record<DefectStatus, string> = {
 };
 
 export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetailsProps) {
+  const isModel = defect.source === 'model';
+
   return (
     <aside className="w-96 shrink-0 border-l border-slate-200 bg-white flex flex-col shadow-lg">
       <div className="px-6 py-5 border-b border-slate-200 flex items-start justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Defect
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Defect
+            </p>
+            {isModel ? (
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-sky-600 text-white px-1.5 py-0.5 rounded">
+                ML
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded">
+                Seed
+              </span>
+            )}
+          </div>
           <h2 className="text-lg font-semibold mt-1">{DEFECT_TYPE_LABELS[defect.type]}</h2>
           <p className="text-xs text-slate-400 mt-0.5 font-mono">{defect.id.slice(0, 8)}</p>
         </div>
@@ -69,9 +82,12 @@ export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetails
           </Field>
         </dl>
 
+        {isModel && <ModelSection defect={defect} />}
+
         <div className="rounded-lg bg-slate-50 p-4 text-xs text-slate-600">
-          Review this automated detection. Confirming flags it for maintenance;
-          rejecting marks it as a false positive.
+          {isModel
+            ? 'Automatic detection from Mask R-CNN. Confirm to keep; reject to mark as false positive. Scores are raw softmax, not calibrated probabilities.'
+            : 'Review this automated detection. Confirming flags it for maintenance; rejecting marks it as a false positive.'}
         </div>
       </div>
 
@@ -94,6 +110,124 @@ export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetails
         </button>
       </div>
     </aside>
+  );
+}
+
+function ModelSection({ defect }: { defect: Defect }) {
+  return (
+    <section className="border border-sky-200 bg-sky-50/60 rounded-lg overflow-hidden">
+      <header className="px-4 py-2 border-b border-sky-200 bg-sky-100/60">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-sky-800">
+          Model output
+        </p>
+      </header>
+      <div className="p-4 space-y-3 text-xs">
+        {defect.modelName && (
+          <div>
+            <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">
+              Detector
+            </p>
+            <p className="font-mono text-slate-700 break-all">{defect.modelName}</p>
+          </div>
+        )}
+        <div className="grid grid-cols-2 gap-3">
+          {defect.modelLabel && (
+            <div>
+              <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">
+                COCO label
+              </p>
+              <p className="font-mono text-slate-800">{defect.modelLabel}</p>
+            </div>
+          )}
+          {defect.modelScore !== undefined && (
+            <div>
+              <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">
+                Raw score
+              </p>
+              <p className="font-mono text-slate-800 tabular-nums">
+                {defect.modelScore.toFixed(3)}
+              </p>
+            </div>
+          )}
+        </div>
+        {defect.bbox && (
+          <div>
+            <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">
+              Bounding box (px)
+            </p>
+            <p className="font-mono text-slate-700">
+              [{defect.bbox.map((n) => n.toFixed(1)).join(', ')}]
+            </p>
+          </div>
+        )}
+        {defect.sourceImage && defect.bbox && (
+          <div>
+            <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px] mb-1">
+              Source image
+            </p>
+            <SourceImagePreview src={defect.sourceImage} bbox={defect.bbox} label={defect.modelLabel} />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function SourceImagePreview({
+  src,
+  bbox,
+  label,
+}: {
+  src: string;
+  bbox: [number, number, number, number];
+  label?: string;
+}) {
+  const [x1, y1, x2, y2] = bbox;
+  // Overlay a rectangle in image-pixel coordinates; the SVG's viewBox gets set
+  // to the natural image size once it loads so the box lines up at any
+  // rendered scale.
+  return (
+    <figure className="relative border border-slate-300 rounded overflow-hidden bg-slate-900">
+      <img
+        src={src}
+        alt="Source frame with detection overlay"
+        className="block w-full h-auto"
+        onLoad={(e) => {
+          const img = e.currentTarget;
+          const overlay = img.parentElement?.querySelector<SVGSVGElement>('svg');
+          if (!overlay) return;
+          overlay.setAttribute('viewBox', `0 0 ${img.naturalWidth} ${img.naturalHeight}`);
+        }}
+      />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        preserveAspectRatio="none"
+      >
+        <rect
+          x={x1}
+          y={y1}
+          width={x2 - x1}
+          height={y2 - y1}
+          fill="none"
+          stroke="#f43f5e"
+          strokeWidth={4}
+          vectorEffect="non-scaling-stroke"
+        />
+        {label && (
+          <text
+            x={x1}
+            y={Math.max(y1 - 8, 14)}
+            fill="#f43f5e"
+            fontSize={18}
+            fontWeight={700}
+            fontFamily="sans-serif"
+          >
+            {label}
+          </text>
+        )}
+      </svg>
+    </figure>
   );
 }
 

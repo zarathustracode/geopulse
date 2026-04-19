@@ -27,6 +27,10 @@ public static class MlReportLoader
             if (report?.Detections is null) return Array.Empty<Defect>();
 
             var timestamp = report.GeneratedAt ?? DateTime.UtcNow;
+            var modelName = report.Model ?? "torchvision.maskrcnn_resnet50_fpn.COCO_V1";
+            var reportDir = Path.GetDirectoryName(Path.GetFullPath(path));
+            var sourceImage = NormaliseSourceImagePath(report.SourceImage, reportDir);
+
             return report.Detections
                 .Where(d => d.Status is "accepted" or "needs_review")
                 .Where(d => d.Latitude.HasValue && d.Longitude.HasValue)
@@ -40,6 +44,12 @@ public static class MlReportLoader
                     Latitude = d.Latitude!.Value,
                     Longitude = d.Longitude!.Value,
                     Timestamp = timestamp,
+                    Source = DefectSource.Model,
+                    ModelName = modelName,
+                    ModelLabel = d.Label,
+                    ModelScore = d.Score,
+                    Bbox = d.Bbox,
+                    SourceImage = sourceImage,
                 })
                 .ToList();
         }
@@ -47,6 +57,21 @@ public static class MlReportLoader
         {
             return Array.Empty<Defect>();
         }
+    }
+
+    // The CLI writes source_image as either an absolute path or one relative
+    // to the report. The API exposes the ml/ directory under /ml/, so we
+    // convert to a web path the browser can load.
+    private static string? NormaliseSourceImagePath(string? raw, string? reportDir)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+        var trimmed = raw.Replace('\\', '/').TrimStart('/');
+        if (Path.IsPathRooted(raw) && reportDir is not null)
+        {
+            var rel = Path.GetRelativePath(reportDir, raw).Replace('\\', '/');
+            return $"/ml/{rel}";
+        }
+        return $"/ml/{trimmed}";
     }
 
     private static DefectType MapLabel(string label) => label switch
@@ -67,12 +92,15 @@ public static class MlReportLoader
     };
 
     private sealed record MlReport(
+        [property: JsonPropertyName("source_image")] string? SourceImage,
+        [property: JsonPropertyName("model")] string? Model,
         [property: JsonPropertyName("generated_at")] DateTime? GeneratedAt,
         [property: JsonPropertyName("detections")] List<MlDetection> Detections);
 
     private sealed record MlDetection(
         [property: JsonPropertyName("label")] string Label,
         [property: JsonPropertyName("score")] double Score,
+        [property: JsonPropertyName("bbox")] double[]? Bbox,
         [property: JsonPropertyName("status")] string Status,
         [property: JsonPropertyName("latitude")] double? Latitude,
         [property: JsonPropertyName("longitude")] double? Longitude);

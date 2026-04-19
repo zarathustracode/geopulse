@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using GeoPulse.Api.Data;
 using GeoPulse.Api.Repositories;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,18 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseCors(DevCorsPolicy);
+
+// Serve the ml/ directory (source images, annotated previews) so the
+// reviewer UI can display what the model actually saw. Mounted under /ml/.
+var mlDirectory = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "..", "ml"));
+if (Directory.Exists(mlDirectory))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(mlDirectory),
+        RequestPath = "/ml",
+    });
+}
 
 if (app.Environment.IsDevelopment())
 {

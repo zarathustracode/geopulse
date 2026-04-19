@@ -19,6 +19,7 @@ export const DEFECT_TYPE_LABELS: Record<DefectType, string> = {
 };
 export type Severity = 'low' | 'medium' | 'high';
 export type DefectStatus = 'new' | 'confirmed' | 'rejected';
+export type DefectSource = 'seed' | 'model';
 
 export interface Defect {
   id: string;
@@ -29,6 +30,12 @@ export interface Defect {
   latitude: number;
   longitude: number;
   timestamp: string;
+  source: DefectSource;
+  modelName?: string;
+  modelLabel?: string;
+  modelScore?: number;
+  bbox?: [number, number, number, number];
+  sourceImage?: string;
 }
 
 export interface BoundingBox {

@@ -14,6 +14,7 @@ interface FilterPanelProps {
   filters: DefectFilters;
   onChange: (filters: DefectFilters) => void;
   totalCount: number;
+  modelCount: number;
   loading: boolean;
   useBbox: boolean;
   onToggleBbox: (next: boolean) => void;
@@ -23,6 +24,7 @@ export function FilterPanel({
   filters,
   onChange,
   totalCount,
+  modelCount,
   loading,
   useBbox,
   onToggleBbox,
@@ -34,6 +36,21 @@ export function FilterPanel({
       <div className="px-6 py-5 border-b border-slate-200">
         <h1 className="text-xl font-semibold tracking-tight">GeoPulse</h1>
         <p className="text-sm text-slate-500 mt-1">Defect review console</p>
+      </div>
+
+      <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
+        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          Object detection
+        </p>
+        <p className="text-sm font-medium text-slate-800 mt-1 font-mono">
+          Mask R-CNN · COCO_V1
+        </p>
+        <p className="text-xs text-slate-500 mt-1">
+          80-class · human-in-the-loop review
+        </p>
+        <p className="text-xs text-slate-400 mt-2 italic leading-snug">
+          Raw softmax — not calibrated. 0.5 threshold is convention, not probability.
+        </p>
       </div>
 
       <div className="px-6 py-5 space-y-6 flex-1 overflow-y-auto">
@@ -123,6 +140,11 @@ export function FilterPanel({
 
       <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 text-sm text-slate-600 flex items-center justify-between">
         <span>{loading ? 'Loading…' : `${totalCount} defects`}</span>
+        {modelCount > 0 && (
+          <span className="text-xs font-medium text-sky-700 bg-sky-100 px-2 py-0.5 rounded">
+            {modelCount} from model
+          </span>
+        )}
       </div>
     </aside>
   );

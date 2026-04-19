@@ -20,6 +20,7 @@ export default function App() {
 
   const { defects, loading, error, updateStatus } = useDefects(effectiveFilters);
   const selected = defects.find((d) => d.id === selectedId) ?? null;
+  const modelCount = defects.filter((d) => d.source === 'model').length;
 
   return (
     <div className="h-full w-full flex overflow-hidden">
@@ -27,12 +28,13 @@ export default function App() {
         filters={filters}
         onChange={setFilters}
         totalCount={defects.length}
+        modelCount={modelCount}
         loading={loading}
         useBbox={useBbox}
         onToggleBbox={setUseBbox}
       />
 
-      <main className="flex-1 relative flex">
+      <main className="flex-1 relative flex min-w-0">
         <DefectMap
           defects={defects}
           selectedId={selectedId}

@@ -30,6 +30,7 @@ const OSM_STYLE: maplibregl.StyleSpecification = {
 const SOURCE_ID = 'defects';
 const CLUSTER_LAYER = 'defect-clusters';
 const CLUSTER_COUNT_LAYER = 'defect-cluster-counts';
+const ML_HALO_LAYER = 'defect-ml-halo';
 const POINT_LAYER = 'defect-points';
 
 function addDefectsLayers(
@@ -76,13 +77,34 @@ function addDefectsLayers(
     paint: { 'text-color': '#ffffff' },
   });
 
+  // Sky-blue halo behind ML points so model detections pop out of the map at a
+  // glance without drowning the seed data.
+  map.addLayer({
+    id: ML_HALO_LAYER,
+    type: 'circle',
+    source: SOURCE_ID,
+    filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'source'], 'model']],
+    paint: {
+      'circle-radius': 20,
+      'circle-color': '#0ea5e9',
+      'circle-opacity': 0.25,
+      'circle-stroke-color': '#0284c7',
+      'circle-stroke-width': 2,
+      'circle-stroke-opacity': 0.9,
+    },
+  });
+
   map.addLayer({
     id: POINT_LAYER,
     type: 'circle',
     source: SOURCE_ID,
     filter: ['!', ['has', 'point_count']],
     paint: {
-      'circle-radius': 7,
+      'circle-radius': [
+        'case',
+        ['==', ['get', 'source'], 'model'], 10,
+        7,
+      ],
       'circle-color': [
         'match',
         ['get', 'severity'],
@@ -91,16 +113,26 @@ function addDefectsLayers(
         'low', '#10b981',
         '#64748b',
       ],
-      'circle-stroke-color': '#ffffff',
-      'circle-stroke-width': 2,
+      'circle-stroke-color': [
+        'case',
+        ['==', ['get', 'source'], 'model'], '#0284c7',
+        '#ffffff',
+      ],
+      'circle-stroke-width': [
+        'case',
+        ['==', ['get', 'source'], 'model'], 3,
+        2,
+      ],
     },
   });
 
-  map.on('click', POINT_LAYER, (e) => {
+  const handlePointClick = (e: maplibregl.MapLayerMouseEvent) => {
     const feature = e.features?.[0] as MapGeoJSONFeature | undefined;
     const id = feature?.properties?.id as string | undefined;
     if (id) onSelect(id);
-  });
+  };
+  map.on('click', POINT_LAYER, handlePointClick);
+  map.on('click', ML_HALO_LAYER, handlePointClick);
 
   map.on('click', CLUSTER_LAYER, (e) => {
     const feature = e.features?.[0];
@@ -117,6 +149,8 @@ function addDefectsLayers(
   const clearPointer = () => (map.getCanvas().style.cursor = '');
   map.on('mouseenter', POINT_LAYER, setPointer);
   map.on('mouseleave', POINT_LAYER, clearPointer);
+  map.on('mouseenter', ML_HALO_LAYER, setPointer);
+  map.on('mouseleave', ML_HALO_LAYER, clearPointer);
   map.on('mouseenter', CLUSTER_LAYER, setPointer);
   map.on('mouseleave', CLUSTER_LAYER, clearPointer);
 }
@@ -138,6 +172,7 @@ export function DefectMap({ defects, selectedId, onSelect, onViewportChange }: D
           severity: d.severity,
           type: d.type,
           confidence: d.confidence,
+          source: d.source,
         },
       })),
     }),
@@ -198,8 +233,8 @@ export function DefectMap({ defects, selectedId, onSelect, onViewportChange }: D
     if (!map.getLayer(POINT_LAYER)) return;
     map.setPaintProperty(POINT_LAYER, 'circle-radius', [
       'case',
-      ['==', ['get', 'id'], ['literal', selectedId ?? '']],
-      11,
+      ['==', ['get', 'id'], ['literal', selectedId ?? '']], 13,
+      ['==', ['get', 'source'], 'model'], 10,
       7,
     ]);
   }, [selectedId, mapReady, featureCollection]);
@@ -212,5 +247,5 @@ export function DefectMap({ defects, selectedId, onSelect, onViewportChange }: D
     map.easeTo({ center: [target.longitude, target.latitude], zoom: Math.max(map.getZoom(), 13) });
   }, [selectedId, defects]);
 
-  return <div ref={containerRef} className="flex-1 h-full" />;
+  return <div ref={containerRef} className="flex-1 h-full min-w-0" />;
 }

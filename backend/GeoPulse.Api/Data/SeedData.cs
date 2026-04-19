@@ -33,7 +33,8 @@ public static class SeedData
                 Status = statuses[random.Next(statuses.Length)],
                 Latitude = Math.Round(centerLat + (random.NextDouble() - 0.5) * 0.10, 6),
                 Longitude = Math.Round(centerLng + (random.NextDouble() - 0.5) * 0.15, 6),
-                Timestamp = now.AddHours(-random.Next(0, 24 * 30))
+                Timestamp = now.AddHours(-random.Next(0, 24 * 30)),
+                Source = DefectSource.Seed,
             });
         }
 
