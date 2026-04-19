@@ -26,8 +26,13 @@ ml/uv.lock
 ml/**/__pycache__
 ml/report.json
 ml/annotated.jpg
+ml/samples/*_annotated.jpg
 
 ## Debug / scratch
 .playwright-mcp/
 geopulse-*.png
+click-works.png
+halos-current.png
+panel-final.png
+real-ml-detection.png
 GeoPulse.pdf

@@ -29,7 +29,7 @@ public static class MlReportLoader
             var timestamp = report.GeneratedAt ?? DateTime.UtcNow;
             var modelName = report.Model ?? "torchvision.maskrcnn_resnet50_fpn.COCO_V1";
             var reportDir = Path.GetDirectoryName(Path.GetFullPath(path));
-            var sourceImage = NormaliseSourceImagePath(report.SourceImage, reportDir);
+            var reportSourceImage = NormaliseSourceImagePath(report.SourceImage, reportDir);
 
             return report.Detections
                 .Where(d => d.Status is "accepted" or "needs_review")
@@ -49,7 +49,7 @@ public static class MlReportLoader
                     ModelLabel = d.Label,
                     ModelScore = d.Score,
                     Bbox = d.Bbox,
-                    SourceImage = sourceImage,
+                    SourceImage = NormaliseSourceImagePath(d.SourceImage, reportDir) ?? reportSourceImage,
                 })
                 .ToList();
         }
@@ -103,5 +103,6 @@ public static class MlReportLoader
         [property: JsonPropertyName("bbox")] double[]? Bbox,
         [property: JsonPropertyName("status")] string Status,
         [property: JsonPropertyName("latitude")] double? Latitude,
-        [property: JsonPropertyName("longitude")] double? Longitude);
+        [property: JsonPropertyName("longitude")] double? Longitude,
+        [property: JsonPropertyName("source_image")] string? SourceImage = null);
 }
