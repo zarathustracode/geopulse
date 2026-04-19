@@ -1,4 +1,4 @@
-import type { Defect, DefectStatus } from '../api/types';
+import { DEFECT_TYPE_LABELS, type Defect, type DefectStatus } from '../api/types';
 
 interface DefectDetailsProps {
   defect: Defect;
@@ -26,7 +26,7 @@ export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetails
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             Defect
           </p>
-          <h2 className="text-lg font-semibold capitalize mt-1">{defect.type}</h2>
+          <h2 className="text-lg font-semibold mt-1">{DEFECT_TYPE_LABELS[defect.type]}</h2>
           <p className="text-xs text-slate-400 mt-0.5 font-mono">{defect.id.slice(0, 8)}</p>
         </div>
         <button

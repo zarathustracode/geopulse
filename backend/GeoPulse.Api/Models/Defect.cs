@@ -4,7 +4,10 @@ public enum DefectType
 {
     Crack,
     Pothole,
-    Damage
+    Damage,
+    Sign,
+    TrafficLight,
+    Hydrant
 }
 
 public enum Severity

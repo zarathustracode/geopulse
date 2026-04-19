@@ -3,7 +3,8 @@ using GeoPulse.Api.Models;
 namespace GeoPulse.Api.Data;
 
 /// <summary>
-/// Reproducible seed data centred on Belgrade (44.8125, 20.4612).
+/// Reproducible seed data centred on Burgdorf, Switzerland (47.0609, 7.6250)
+/// — the demo pretends it came from a mobile-mapping run around the town.
 /// Replace this with a DbContext-backed source once PostGIS is wired in.
 /// </summary>
 public static class SeedData
@@ -16,8 +17,8 @@ public static class SeedData
         var statuses = new[] { DefectStatus.New, DefectStatus.New, DefectStatus.New,
                                DefectStatus.Confirmed, DefectStatus.Rejected };
 
-        const double centerLat = 44.8125;
-        const double centerLng = 20.4612;
+        const double centerLat = 47.0609;
+        const double centerLng = 7.6250;
         var now = DateTime.UtcNow;
 
         var defects = new List<Defect>(capacity: 30);

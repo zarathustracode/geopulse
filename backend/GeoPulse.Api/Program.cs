@@ -27,8 +27,24 @@ builder.Services.AddOpenApi(options =>
 
 // Repository is registered as a singleton so the in-memory store survives across requests.
 // Swap this registration for a PostGIS-backed implementation when moving off in-memory storage.
-builder.Services.AddSingleton<IDefectRepository>(_ =>
-    new InMemoryDefectRepository(SeedData.Generate()));
+// On startup we also splice in any detections emitted by the geopulse-ml Python pipeline,
+// which is how the PyTorch side feeds real inference output into the reviewer UI.
+var mlReportPath = builder.Configuration["MlReportPath"]
+    ?? Path.Combine(builder.Environment.ContentRootPath, "..", "..", "ml", "report.json");
+
+builder.Services.AddSingleton<IDefectRepository>(sp =>
+{
+    var seed = SeedData.Generate();
+    var mlDetections = MlReportLoader.LoadOrEmpty(mlReportPath);
+    if (mlDetections.Count > 0)
+    {
+        seed.AddRange(mlDetections);
+        sp.GetRequiredService<ILoggerFactory>()
+            .CreateLogger("MlReport")
+            .LogInformation("Loaded {Count} detections from {Path}", mlDetections.Count, mlReportPath);
+    }
+    return new InMemoryDefectRepository(seed);
+});
 
 const string DevCorsPolicy = "DevCors";
 builder.Services.AddCors(options =>

@@ -150,8 +150,8 @@ export function DefectMap({ defects, selectedId, onSelect, onViewportChange }: D
     const map = new maplibregl.Map({
       container: containerRef.current,
       style: OSM_STYLE,
-      center: [20.4612, 44.8125],
-      zoom: 11.5,
+      center: [7.6250, 47.0609],
+      zoom: 12.5,
     });
     mapRef.current = map;
 

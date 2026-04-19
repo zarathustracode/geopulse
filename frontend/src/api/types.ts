@@ -1,7 +1,22 @@
 // Shapes mirror the backend's Defect model. Regenerate via `npm run generate-api`
 // once the backend is running to replace this file with openapi-ts output.
 
-export type DefectType = 'crack' | 'pothole' | 'damage';
+export type DefectType =
+  | 'crack'
+  | 'pothole'
+  | 'damage'
+  | 'sign'
+  | 'trafficLight'
+  | 'hydrant';
+
+export const DEFECT_TYPE_LABELS: Record<DefectType, string> = {
+  crack: 'Crack',
+  pothole: 'Pothole',
+  damage: 'Damage',
+  sign: 'Sign',
+  trafficLight: 'Traffic light',
+  hydrant: 'Hydrant',
+};
 export type Severity = 'low' | 'medium' | 'high';
 export type DefectStatus = 'new' | 'confirmed' | 'rejected';
 

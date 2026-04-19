@@ -23,7 +23,7 @@ GeoPulse/
 │  │  ├─ Controllers/         REST endpoints
 │  │  ├─ Models/              Defect, enums, DTOs
 │  │  ├─ Repositories/        IDefectRepository + in-memory impl
-│  │  ├─ Data/SeedData.cs     30 reproducible defects around Belgrade
+│  │  ├─ Data/SeedData.cs     30 reproducible defects around Burgdorf
 │  │  └─ Program.cs           DI, OpenAPI, Swagger UI, CORS
 │  └─ Dockerfile
 ├─ frontend/

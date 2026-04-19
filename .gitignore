@@ -19,6 +19,14 @@ Thumbs.db
 ## Env
 *.env.local
 
+## Python / ml
+ml/.venv
+ml/.python-version
+ml/uv.lock
+ml/**/__pycache__
+ml/report.json
+ml/annotated.jpg
+
 ## Debug / scratch
 .playwright-mcp/
 geopulse-*.png

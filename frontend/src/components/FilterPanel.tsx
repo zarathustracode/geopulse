@@ -1,10 +1,8 @@
-import type { DefectFilters, DefectStatus, DefectType } from '../api/types';
+import { DEFECT_TYPE_LABELS, type DefectFilters, type DefectStatus, type DefectType } from '../api/types';
 
-const TYPES: Array<{ value: DefectType; label: string }> = [
-  { value: 'crack', label: 'Crack' },
-  { value: 'pothole', label: 'Pothole' },
-  { value: 'damage', label: 'Damage' },
-];
+const TYPES: Array<{ value: DefectType; label: string }> = (
+  Object.keys(DEFECT_TYPE_LABELS) as DefectType[]
+).map((value) => ({ value, label: DEFECT_TYPE_LABELS[value] }));
 
 const STATUSES: Array<{ value: DefectStatus; label: string }> = [
   { value: 'new', label: 'New' },
