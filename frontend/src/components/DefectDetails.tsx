@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { DEFECT_TYPE_LABELS, type Defect, type DefectStatus } from '../api/types';
 
 interface DefectDetailsProps {
@@ -182,16 +183,43 @@ function SourceImagePreview({
   bbox: [number, number, number, number];
   label?: string;
 }) {
-  const [x1, y1, x2, y2] = bbox;
-  // Overlay a rectangle in image-pixel coordinates; the SVG's viewBox gets set
-  // to the natural image size once it loads so the box lines up at any
-  // rendered scale.
+  const [expanded, setExpanded] = useState(false);
   return (
-    <figure className="relative border border-slate-300 rounded overflow-hidden bg-slate-900">
+    <>
+      <button
+        type="button"
+        onClick={() => setExpanded(true)}
+        className="group relative block w-full border border-slate-300 rounded overflow-hidden bg-slate-900 cursor-zoom-in"
+        aria-label="Expand source frame"
+      >
+        <AnnotatedFrame src={src} bbox={bbox} label={label} className="block w-full h-auto" />
+        <span className="absolute top-1.5 right-1.5 bg-slate-900/70 text-white text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded opacity-80 group-hover:opacity-100">
+          ⤢ Expand
+        </span>
+      </button>
+      {expanded && <SourceImageLightbox src={src} bbox={bbox} label={label} onClose={() => setExpanded(false)} />}
+    </>
+  );
+}
+
+function AnnotatedFrame({
+  src,
+  bbox,
+  label,
+  className,
+}: {
+  src: string;
+  bbox: [number, number, number, number];
+  label?: string;
+  className?: string;
+}) {
+  const [x1, y1, x2, y2] = bbox;
+  return (
+    <figure className="relative">
       <img
         src={src}
         alt="Source frame with detection overlay"
-        className="block w-full h-auto"
+        className={className}
         onLoad={(e) => {
           const img = e.currentTarget;
           const overlay = img.parentElement?.querySelector<SVGSVGElement>('svg');
@@ -228,6 +256,52 @@ function SourceImagePreview({
         )}
       </svg>
     </figure>
+  );
+}
+
+function SourceImageLightbox({
+  src,
+  bbox,
+  label,
+  onClose,
+}: {
+  src: string;
+  bbox: [number, number, number, number];
+  label?: string;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-8"
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute top-4 right-6 text-white/80 hover:text-white text-3xl leading-none"
+      >
+        ×
+      </button>
+      <div className="max-w-[92vw] max-h-[92vh]" onClick={(e) => e.stopPropagation()}>
+        <AnnotatedFrame
+          src={src}
+          bbox={bbox}
+          label={label}
+          className="block max-w-[92vw] max-h-[92vh] w-auto h-auto rounded shadow-2xl"
+        />
+      </div>
+    </div>
   );
 }
 
