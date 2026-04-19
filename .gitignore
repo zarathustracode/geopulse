@@ -24,9 +24,7 @@ ml/.venv
 ml/.python-version
 ml/uv.lock
 ml/**/__pycache__
-ml/report.json
 ml/annotated.jpg
-ml/samples/*_annotated.jpg
 
 ## Debug / scratch
 .playwright-mcp/

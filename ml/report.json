@@ -1,0 +1,107 @@
+{
+  "model": "torchvision.maskrcnn_resnet50_fpn.COCO_V1",
+  "generated_at": "2026-04-19T19:04:39.752299+00:00",
+  "survey_run": {
+    "center_lat": 47.0609,
+    "center_lng": 7.625,
+    "radius_m": 300.0
+  },
+  "score_threshold": 0.3,
+  "kept_classes": [
+    "fire hydrant",
+    "stop sign",
+    "traffic light"
+  ],
+  "detections": [
+    {
+      "label": "stop sign",
+      "score": 0.9592816233634949,
+      "bbox": [
+        437.00592041015625,
+        356.59954833984375,
+        461.4559631347656,
+        384.1929931640625
+      ],
+      "id": 1,
+      "status": "accepted",
+      "latitude": 47.060669963542175,
+      "longitude": 7.625555249729626,
+      "source_image": "samples/street.jpg"
+    },
+    {
+      "label": "stop sign",
+      "score": 0.3139238953590393,
+      "bbox": [
+        312.5081787109375,
+        368.6758117675781,
+        326.587890625,
+        387.600341796875
+      ],
+      "id": 2,
+      "status": "needs_review",
+      "latitude": 47.05928323948418,
+      "longitude": 7.624090450625654,
+      "source_image": "samples/street.jpg"
+    },
+    {
+      "label": "traffic light",
+      "score": 0.9766248464584351,
+      "bbox": [
+        253.36927795410156,
+        142.43255615234375,
+        348.6144714355469,
+        380.7471923828125
+      ],
+      "id": 3,
+      "status": "accepted",
+      "latitude": 47.06258790163136,
+      "longitude": 7.624015690157725,
+      "source_image": "samples/traffic_light.jpg"
+    },
+    {
+      "label": "traffic light",
+      "score": 0.9751925468444824,
+      "bbox": [
+        154.55548095703125,
+        140.27638244628906,
+        242.37277221679688,
+        374.75225830078125
+      ],
+      "id": 4,
+      "status": "accepted",
+      "latitude": 47.06206356393311,
+      "longitude": 7.623597364427252,
+      "source_image": "samples/traffic_light.jpg"
+    },
+    {
+      "label": "traffic light",
+      "score": 0.7268882393836975,
+      "bbox": [
+        165.60638427734375,
+        137.44137573242188,
+        347.4530334472656,
+        384.04913330078125
+      ],
+      "id": 5,
+      "status": "needs_review",
+      "latitude": 47.05878999487292,
+      "longitude": 7.623988443851502,
+      "source_image": "samples/traffic_light.jpg"
+    },
+    {
+      "label": "traffic light",
+      "score": 0.3465862274169922,
+      "bbox": [
+        218.5204315185547,
+        444.1714782714844,
+        256.17242431640625,
+        505.2661437988281
+      ],
+      "id": 6,
+      "status": "needs_review",
+      "latitude": 47.06290924171785,
+      "longitude": 7.626890833565734,
+      "source_image": "samples/traffic_light.jpg"
+    }
+  ]
+}
