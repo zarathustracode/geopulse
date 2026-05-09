@@ -15,6 +15,12 @@ dependencies = [
     "typer>=0.12",
 ]
 
+[project.optional-dependencies]
+training = [
+    "modal>=1.0",
+    "ultralytics>=8.3",
+]
+
 [project.scripts]
 geopulse-ml = "geopulse_ml.cli:app"
 
