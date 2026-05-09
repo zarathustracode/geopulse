@@ -24,6 +24,7 @@ vol = modal.Volume.from_name("rdd2022", create_if_missing=False)
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
+    .apt_install("libgl1", "libglib2.0-0")  # ultralytics -> opencv needs libGL
     .pip_install(
         "torch==2.11.0",
         "torchvision",
