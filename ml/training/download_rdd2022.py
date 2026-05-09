@@ -31,15 +31,17 @@ image = (
     .pip_install("tqdm>=4.66")
 )
 
-# RDD2022 country-zip URLs (sekilab/RoadDamageDetector release).
-# Six countries, ~5 GB total.
+# RDD2022 country-zip URLs (CRDDC2022 official S3 mirror).
+# Skipping Norway (9.9 GB) for the baseline; the other 5 total ~2.4 GB.
+# Re-add Norway later if cross-domain story needs it.
+_S3_BASE = "https://bigdatacup.s3.ap-northeast-1.amazonaws.com/2022/CRDDC2022/RDD2022/Country_Specific_Data_CRDDC2022"
 COUNTRY_URLS = {
-    "Japan":  "https://github.com/sekilab/RoadDamageDetector/releases/download/RDD2022_v1/RDD2022_Japan.zip",
-    "India":  "https://github.com/sekilab/RoadDamageDetector/releases/download/RDD2022_v1/RDD2022_India.zip",
-    "Czech":  "https://github.com/sekilab/RoadDamageDetector/releases/download/RDD2022_v1/RDD2022_Czech.zip",
-    "Norway": "https://github.com/sekilab/RoadDamageDetector/releases/download/RDD2022_v1/RDD2022_Norway.zip",
-    "United_States": "https://github.com/sekilab/RoadDamageDetector/releases/download/RDD2022_v1/RDD2022_United_States.zip",
-    "China_MotorBike": "https://github.com/sekilab/RoadDamageDetector/releases/download/RDD2022_v1/RDD2022_China_MotorBike.zip",
+    "Japan":           f"{_S3_BASE}/RDD2022_Japan.zip",            # 1022 MB
+    "India":           f"{_S3_BASE}/RDD2022_India.zip",            #  502 MB
+    "Czech":           f"{_S3_BASE}/RDD2022_Czech.zip",            #  245 MB
+    "United_States":   f"{_S3_BASE}/RDD2022_United_States.zip",    #  424 MB
+    "China_MotorBike": f"{_S3_BASE}/RDD2022_China_MotorBike.zip",  #  183 MB
+    # "Norway":        f"{_S3_BASE}/RDD2022_Norway.zip",           # 9.9 GB — skipped
 }
 
 # Canonical 4-class taxonomy used in the IEEE Big Data 2022 challenge.
