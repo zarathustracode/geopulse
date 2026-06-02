@@ -247,5 +247,63 @@ export function DefectMap({ defects, selectedId, onSelect, onViewportChange }: D
     map.easeTo({ center: [target.longitude, target.latitude], zoom: Math.max(map.getZoom(), 13) });
   }, [selectedId, defects]);
 
-  return <div ref={containerRef} className="flex-1 h-full min-w-0" />;
+  return (
+    <div className="relative flex-1 h-full min-w-0">
+      <div ref={containerRef} className="absolute inset-0" />
+      <MapLegend />
+    </div>
+  );
+}
+
+function MapLegend() {
+  return (
+    <div className="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur rounded-md shadow border border-slate-200 px-3 py-2.5 text-xs leading-tight w-52">
+      <p className="font-semibold text-slate-700 uppercase tracking-wider text-[10px] mb-1.5">
+        Legend
+      </p>
+      <div className="space-y-1 mb-2">
+        <LegendRow color="#e11d48" label="High score (≥ 0.70)" />
+        <LegendRow color="#f59e0b" label="Medium (≥ 0.50)" />
+        <LegendRow color="#10b981" label="Low (&lt; 0.50)" />
+      </div>
+      <div className="space-y-1 mb-2 pt-2 border-t border-slate-100">
+        <LegendRow color="#0ea5e9" label="Blue circle = cluster (zoom in)" outlined />
+        <LegendRow color="#10b981" ring="#0284c7" label="Cyan ring = from model" />
+      </div>
+      <div className="pt-2 border-t border-slate-100 text-slate-500">
+        <p className="font-medium text-slate-600 mb-0.5">RDD2022 classes</p>
+        <p>D00 longitudinal · D10 transverse</p>
+        <p>D20 alligator · D40 pothole</p>
+      </div>
+    </div>
+  );
+}
+
+function LegendRow({
+  color,
+  label,
+  ring,
+  outlined,
+}: {
+  color: string;
+  label: string;
+  ring?: string;
+  outlined?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-2 text-slate-700">
+      <span
+        className="inline-block w-3 h-3 rounded-full shrink-0"
+        style={{
+          backgroundColor: color,
+          boxShadow: ring
+            ? `0 0 0 2px ${ring}`
+            : outlined
+            ? '0 0 0 1px white'
+            : undefined,
+        }}
+      />
+      <span>{label}</span>
+    </div>
+  );
 }

@@ -35,16 +35,11 @@ var mlReportPath = builder.Configuration["MlReportPath"]
 
 builder.Services.AddSingleton<IDefectRepository>(sp =>
 {
-    var seed = SeedData.Generate();
     var mlDetections = MlReportLoader.LoadOrEmpty(mlReportPath);
-    if (mlDetections.Count > 0)
-    {
-        seed.AddRange(mlDetections);
-        sp.GetRequiredService<ILoggerFactory>()
-            .CreateLogger("MlReport")
-            .LogInformation("Loaded {Count} detections from {Path}", mlDetections.Count, mlReportPath);
-    }
-    return new InMemoryDefectRepository(seed);
+    sp.GetRequiredService<ILoggerFactory>()
+        .CreateLogger("MlReport")
+        .LogInformation("Loaded {Count} detections from {Path}", mlDetections.Count, mlReportPath);
+    return new InMemoryDefectRepository(mlDetections.ToList());
 });
 
 const string DevCorsPolicy = "DevCors";
@@ -53,7 +48,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(DevCorsPolicy, policy => policy
         .WithOrigins(
             "http://localhost:5173",
-            "http://localhost:3000")
+            "http://localhost:3000",
+            "https://geopulse.igaspar.com")
         .AllowAnyHeader()
         .AllowAnyMethod());
 });

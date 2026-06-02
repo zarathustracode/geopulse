@@ -76,18 +76,25 @@ public static class MlReportLoader
 
     private static DefectType MapLabel(string label) => label switch
     {
+        // COCO Mask R-CNN (legacy / sample run)
         "stop sign" => DefectType.Sign,
         "traffic light" => DefectType.TrafficLight,
         "fire hydrant" => DefectType.Hydrant,
+        // RDD2022 YOLO11m baseline
+        "D00" => DefectType.LongitudinalCrack,
+        "D10" => DefectType.TransverseCrack,
+        "D20" => DefectType.AlligatorCrack,
+        "D40" => DefectType.Pothole,
         _ => DefectType.Damage,
     };
 
-    // Pretrained Mask R-CNN scores are not probability-calibrated; bucketing
-    // them as severity is a presentation choice, not a claim about risk.
+    // Bucketing raw scores into severity is a presentation choice (these scores
+    // aren't calibrated probabilities). Thresholds chosen so the top-confidence
+    // detections in the RDD2022 YOLO baseline land as "high".
     private static Severity SeverityFromScore(double score) => score switch
     {
-        >= 0.85 => Severity.High,
-        >= 0.65 => Severity.Medium,
+        >= 0.70 => Severity.High,
+        >= 0.50 => Severity.Medium,
         _ => Severity.Low,
     };
 

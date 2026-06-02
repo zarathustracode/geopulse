@@ -24,7 +24,7 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.table import Table
 
-from .detect import Detection, detect
+from .detect import Detection, detect, detect_yolo
 
 app = typer.Typer(help="Human-in-the-loop review for street-imagery detections.")
 console = Console()
@@ -196,6 +196,71 @@ def batch(
         },
         "score_threshold": score_threshold,
         "kept_classes": sorted(keep),
+        "detections": records,
+    }
+    output.write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+    counts = {s: sum(1 for r in records if r["status"] == s) for s in ("accepted", "needs_review")}
+    console.print(
+        f"[green]{counts['accepted']} accepted[/] - "
+        f"[yellow]{counts['needs_review']} flagged[/] -> {output}"
+    )
+
+
+@app.command()
+def yolo(
+    images: Annotated[list[Path], typer.Argument(exists=True, dir_okay=False, help="Street-imagery inputs.")],
+    weights: Annotated[Path, typer.Option(exists=True, dir_okay=False, help="Path to YOLO best.pt.")] = Path("weights/best.pt"),
+    output: Annotated[Path, typer.Option(help="Where to write the merged JSON report.")] = Path("report.json"),
+    score_threshold: Annotated[float, typer.Option(min=0.0, max=1.0)] = 0.3,
+    center_lat: Annotated[float, typer.Option()] = DEFAULT_CENTER_LAT,
+    center_lng: Annotated[float, typer.Option()] = DEFAULT_CENTER_LNG,
+    radius_m: Annotated[float, typer.Option()] = DEFAULT_RADIUS_M,
+    base_dir: Annotated[Path, typer.Option(help="Directory that source_image paths are written relative to.")] = Path.cwd(),
+    accept_above: Annotated[float, typer.Option(min=0.0, max=1.0)] = 0.5,
+) -> None:
+    """RDD2022 YOLO inference: cracks (D00/D10/D20) and potholes (D40) over real road photos."""
+    console.print(Panel.fit(f"[bold]Loading RDD2022 YOLO[/] ({weights}) on {len(images)} image(s)"))
+
+    rng = random.Random(0xC0DE)
+    records: list[dict] = []
+    next_id = 1
+    base = base_dir.resolve()
+
+    for image in images:
+        detections = detect_yolo(image, weights, score_threshold=score_threshold)
+        if not detections:
+            console.print(f"[dim]{image.name}: no detections above threshold[/]")
+            continue
+        annotated_path = image.with_name(f"{image.stem}_annotated.jpg")
+        _annotate(image, detections, annotated_path)
+        try:
+            rel = image.resolve().relative_to(base).as_posix()
+        except ValueError:
+            rel = image.name
+        for det in detections:
+            lat, lng = _disc_point(rng, center_lat, center_lng, radius_m)
+            status = "accepted" if det.score >= accept_above else "needs_review"
+            records.append(asdict(det) | {
+                "id": next_id,
+                "status": status,
+                "latitude": lat,
+                "longitude": lng,
+                "source_image": rel,
+            })
+            next_id += 1
+        console.print(f"[green]{image.name}[/]: {len(detections)} detection(s)")
+
+    report = {
+        "model": "ultralytics.yolo11m.rdd2022_baseline",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "survey_run": {
+            "center_lat": center_lat,
+            "center_lng": center_lng,
+            "radius_m": radius_m,
+        },
+        "score_threshold": score_threshold,
+        "kept_classes": ["D00", "D10", "D20", "D40"],
         "detections": records,
     }
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")

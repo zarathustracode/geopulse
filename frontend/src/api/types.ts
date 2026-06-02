@@ -2,16 +2,22 @@
 // once the backend is running to replace this file with openapi-ts output.
 
 export type DefectType =
-  | 'crack'
+  | 'longitudinalCrack'
+  | 'transverseCrack'
+  | 'alligatorCrack'
   | 'pothole'
+  | 'crack'
   | 'damage'
   | 'sign'
   | 'trafficLight'
   | 'hydrant';
 
 export const DEFECT_TYPE_LABELS: Record<DefectType, string> = {
+  longitudinalCrack: 'Longitudinal crack (D00)',
+  transverseCrack: 'Transverse crack (D10)',
+  alligatorCrack: 'Alligator crack (D20)',
+  pothole: 'Pothole (D40)',
   crack: 'Crack',
-  pothole: 'Pothole',
   damage: 'Damage',
   sign: 'Sign',
   trafficLight: 'Traffic light',

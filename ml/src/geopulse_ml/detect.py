@@ -35,6 +35,33 @@ def _load_model() -> tuple[torch.nn.Module, list[str]]:
     return model, weights.meta["categories"]
 
 
+@lru_cache(maxsize=4)
+def _load_yolo(weights_path: str):
+    from ultralytics import YOLO  # lazy import; only needed for the yolo path
+    return YOLO(weights_path)
+
+
+def detect_yolo(
+    image_path: Path,
+    weights_path: Path,
+    *,
+    score_threshold: float = 0.3,
+) -> list[Detection]:
+    """RDD2022 fine-tuned YOLO inference. Returns RDD2022 labels (D00/D10/D20/D40)."""
+    model = _load_yolo(str(weights_path))
+    result = model(str(image_path), conf=score_threshold, verbose=False)[0]
+    names = result.names
+    detections: list[Detection] = []
+    for box in result.boxes:
+        cls = int(box.cls.item())
+        score = float(box.conf.item())
+        x1, y1, x2, y2 = box.xyxy[0].tolist()
+        detections.append(
+            Detection(label=names[cls], score=score, bbox=(x1, y1, x2, y2))
+        )
+    return detections
+
+
 def detect(
     image_path: Path,
     *,

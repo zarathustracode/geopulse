@@ -1,8 +1,26 @@
-import { DEFECT_TYPE_LABELS, type DefectFilters, type DefectStatus, type DefectType } from '../api/types';
+import type { DefectFilters, DefectStatus, DefectType } from '../api/types';
 
-const TYPES: Array<{ value: DefectType; label: string }> = (
-  Object.keys(DEFECT_TYPE_LABELS) as DefectType[]
-).map((value) => ({ value, label: DEFECT_TYPE_LABELS[value] }));
+// Only show types the RDD2022 YOLO baseline actually produces.
+const ACTIVE_TYPES: DefectType[] = [
+  'longitudinalCrack',
+  'transverseCrack',
+  'alligatorCrack',
+  'pothole',
+];
+const TYPE_SHORT_LABELS: Record<DefectType, string> = {
+  longitudinalCrack: 'D00',
+  transverseCrack: 'D10',
+  alligatorCrack: 'D20',
+  pothole: 'D40',
+  crack: 'Crack',
+  damage: 'Damage',
+  sign: 'Sign',
+  trafficLight: 'Traffic light',
+  hydrant: 'Hydrant',
+};
+const TYPES: Array<{ value: DefectType; label: string }> = ACTIVE_TYPES.map(
+  (value) => ({ value, label: TYPE_SHORT_LABELS[value] }),
+);
 
 const STATUSES: Array<{ value: DefectStatus; label: string }> = [
   { value: 'new', label: 'New' },
@@ -43,13 +61,16 @@ export function FilterPanel({
           Object detection
         </p>
         <p className="text-sm font-medium text-slate-800 mt-1 font-mono">
-          Mask R-CNN · COCO_V1
+          YOLO11m · RDD2022 baseline
         </p>
         <p className="text-xs text-slate-500 mt-1">
-          80-class · human-in-the-loop review
+          4-class · cracks (D00/D10/D20) + pothole (D40)
+        </p>
+        <p className="text-xs text-slate-500 mt-1">
+          mAP@0.5 = 0.636 · 11.3 ms / image (A10G)
         </p>
         <p className="text-xs text-slate-400 mt-2 italic leading-snug">
-          Raw softmax — not calibrated. 0.5 threshold is convention, not probability.
+          Per-country range 0.89 (China) → 0.38 (India). Scores are raw — uncalibrated.
         </p>
       </div>
 

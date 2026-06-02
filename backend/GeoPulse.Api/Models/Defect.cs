@@ -2,8 +2,11 @@ namespace GeoPulse.Api.Models;
 
 public enum DefectType
 {
-    Crack,
+    LongitudinalCrack,
+    TransverseCrack,
+    AlligatorCrack,
     Pothole,
+    Crack,
     Damage,
     Sign,
     TrafficLight,
