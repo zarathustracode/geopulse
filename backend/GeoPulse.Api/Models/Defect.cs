@@ -33,6 +33,14 @@ public enum DefectSource
     Model
 }
 
+public enum MatchStatus
+{
+    Unknown,            // no ground-truth label available (production case)
+    TruePositive,       // model prediction matched a labelled box at IoU ≥ 0.5
+    FalsePositive,      // model prediction with no matching label
+    FalseNegative       // labelled box the model failed to propose
+}
+
 public sealed class Defect
 {
     public required Guid Id { get; init; }
@@ -51,6 +59,8 @@ public sealed class Defect
     public string? ModelName { get; init; }
     public string? ModelLabel { get; init; }
     public double? ModelScore { get; init; }
+    public double? CalibratedScore { get; init; }
     public double[]? Bbox { get; init; }
     public string? SourceImage { get; init; }
+    public MatchStatus MatchStatus { get; init; } = MatchStatus.Unknown;
 }

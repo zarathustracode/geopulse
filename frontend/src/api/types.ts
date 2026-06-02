@@ -26,6 +26,11 @@ export const DEFECT_TYPE_LABELS: Record<DefectType, string> = {
 export type Severity = 'low' | 'medium' | 'high';
 export type DefectStatus = 'new' | 'confirmed' | 'rejected';
 export type DefectSource = 'seed' | 'model';
+export type MatchStatus =
+  | 'unknown'           // no ground truth available
+  | 'truePositive'      // matched a labelled box at IoU ≥ 0.5
+  | 'falsePositive'     // model proposed; nothing to match
+  | 'falseNegative';    // labelled; model missed it
 
 export interface Defect {
   id: string;
@@ -42,6 +47,8 @@ export interface Defect {
   modelScore?: number;
   bbox?: [number, number, number, number];
   sourceImage?: string;
+  matchStatus?: MatchStatus;
+  calibratedScore?: number;
 }
 
 export interface BoundingBox {

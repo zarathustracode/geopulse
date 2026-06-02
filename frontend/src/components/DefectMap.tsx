@@ -102,24 +102,35 @@ function addDefectsLayers(
     paint: {
       'circle-radius': [
         'case',
+        ['==', ['get', 'matchStatus'], 'falseNegative'], 8,
         ['==', ['get', 'source'], 'model'], 10,
         7,
       ],
       'circle-color': [
-        'match',
-        ['get', 'severity'],
-        'high', '#e11d48',
-        'medium', '#f59e0b',
-        'low', '#10b981',
-        '#64748b',
+        'case',
+        // Ground-truth misses get a hollow grey marker (model never saw them).
+        ['==', ['get', 'matchStatus'], 'falseNegative'], '#ffffff',
+        [
+          'match',
+          ['get', 'severity'],
+          'high', '#e11d48',
+          'medium', '#f59e0b',
+          'low', '#10b981',
+          '#64748b',
+        ],
       ],
       'circle-stroke-color': [
-        'case',
-        ['==', ['get', 'source'], 'model'], '#0284c7',
-        '#ffffff',
+        'match',
+        ['get', 'matchStatus'],
+        'truePositive', '#10b981',
+        'falsePositive', '#e11d48',
+        'falseNegative', '#64748b',
+        // unknown / no ground truth — keep the model-source cyan hint.
+        ['case', ['==', ['get', 'source'], 'model'], '#0284c7', '#ffffff'],
       ],
       'circle-stroke-width': [
         'case',
+        ['==', ['get', 'matchStatus'], 'falseNegative'], 3,
         ['==', ['get', 'source'], 'model'], 3,
         2,
       ],
@@ -173,6 +184,7 @@ export function DefectMap({ defects, selectedId, onSelect, onViewportChange }: D
           type: d.type,
           confidence: d.confidence,
           source: d.source,
+          matchStatus: d.matchStatus ?? 'unknown',
         },
       })),
     }),
@@ -267,8 +279,10 @@ function MapLegend() {
         <LegendRow color="#10b981" label="Low (&lt; 0.50)" />
       </div>
       <div className="space-y-1 mb-2 pt-2 border-t border-slate-100">
-        <LegendRow color="#0ea5e9" label="Blue circle = cluster (zoom in)" outlined />
-        <LegendRow color="#10b981" ring="#0284c7" label="Cyan ring = from model" />
+        <LegendRow color="#10b981" ring="#10b981" label="Green ring = true positive" />
+        <LegendRow color="#e11d48" ring="#e11d48" label="Red ring = false positive" />
+        <LegendRow color="#ffffff" ring="#64748b" label="Hollow grey = missed (FN)" outlined />
+        <LegendRow color="#0ea5e9" label="Big blue = cluster (zoom in)" outlined />
       </div>
       <div className="pt-2 border-t border-slate-100 text-slate-500">
         <p className="font-medium text-slate-600 mb-0.5">RDD2022 classes</p>

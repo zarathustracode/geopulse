@@ -50,6 +50,8 @@ public static class MlReportLoader
                     ModelScore = d.Score,
                     Bbox = d.Bbox,
                     SourceImage = NormaliseSourceImagePath(d.SourceImage, reportDir) ?? reportSourceImage,
+                    MatchStatus = ParseMatchStatus(d.MatchStatus),
+                    CalibratedScore = d.CalibratedScore,
                 })
                 .ToList();
         }
@@ -73,6 +75,14 @@ public static class MlReportLoader
         }
         return $"/ml/{trimmed}";
     }
+
+    private static MatchStatus ParseMatchStatus(string? raw) => raw switch
+    {
+        "tp" => MatchStatus.TruePositive,
+        "fp" => MatchStatus.FalsePositive,
+        "fn" => MatchStatus.FalseNegative,
+        _ => MatchStatus.Unknown,
+    };
 
     private static DefectType MapLabel(string label) => label switch
     {
@@ -111,5 +121,7 @@ public static class MlReportLoader
         [property: JsonPropertyName("status")] string Status,
         [property: JsonPropertyName("latitude")] double? Latitude,
         [property: JsonPropertyName("longitude")] double? Longitude,
-        [property: JsonPropertyName("source_image")] string? SourceImage = null);
+        [property: JsonPropertyName("source_image")] string? SourceImage = null,
+        [property: JsonPropertyName("match_status")] string? MatchStatus = null,
+        [property: JsonPropertyName("calibrated_score")] double? CalibratedScore = null);
 }

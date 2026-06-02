@@ -1,17 +1,27 @@
 {
   "model": "ultralytics.yolo11m.rdd2022_baseline",
-  "generated_at": "2026-05-31T16:43:53.980002+00:00",
+  "generated_at": "2026-06-02T12:07:57.297233+00:00",
   "score_threshold": 0.3,
+  "iou_threshold": 0.5,
+  "temperature": 1.0888194921194612,
   "kept_classes": [
     "D00",
     "D10",
     "D20",
     "D40"
   ],
+  "demo_image_metrics": {
+    "tp": 17,
+    "fp": 8,
+    "fn": 11,
+    "precision": 0.68,
+    "recall": 0.6071428571428571
+  },
   "detections": [
     {
       "label": "D00",
       "score": 0.7272136807441711,
+      "calibrated_score": 0.7110616064247515,
       "bbox": [
         226.46786499023438,
         2.916918992996216,
@@ -22,11 +32,13 @@
       "status": "accepted",
       "latitude": 47.056808302951815,
       "longitude": 7.619962674264679,
-      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001930.jpg"
+      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001930.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.558844804763794,
+      "calibrated_score": 0.5540837830319986,
       "bbox": [
         204.96249389648438,
         326.9031066894531,
@@ -37,11 +49,13 @@
       "status": "accepted",
       "latitude": 47.05565269957016,
       "longitude": 7.618742097626507,
-      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001930.jpg"
+      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001930.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D20",
       "score": 0.7972472310066223,
+      "calibrated_score": 0.7785933837660242,
       "bbox": [
         0.17680664360523224,
         149.1092529296875,
@@ -52,11 +66,13 @@
       "status": "accepted",
       "latitude": 47.05840658469281,
       "longitude": 7.618679801793334,
-      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001958.jpg"
+      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001958.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.5242189168930054,
+      "calibrated_score": 0.5222460040873654,
       "bbox": [
         0.19353027641773224,
         257.902587890625,
@@ -67,11 +83,13 @@
       "status": "accepted",
       "latitude": 47.05796963661093,
       "longitude": 7.6183312225155495,
-      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001972.jpg"
+      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001972.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.3517233729362488,
+      "calibrated_score": 0.3631791417069001,
       "bbox": [
         128.68576049804688,
         188.3908233642578,
@@ -82,11 +100,13 @@
       "status": "needs_review",
       "latitude": 47.0552416623941,
       "longitude": 7.618657098198853,
-      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001972.jpg"
+      "source_image": "samples_rdd/China_MotorBike_China_MotorBike_001972.jpg",
+      "match_status": "fp"
     },
     {
       "label": "D00",
       "score": 0.8048087954521179,
+      "calibrated_score": 0.7860141942295993,
       "bbox": [
         18.613056182861328,
         419.00250244140625,
@@ -97,292 +117,507 @@
       "status": "accepted",
       "latitude": 47.05767436809821,
       "longitude": 7.638575549841633,
-      "source_image": "samples_rdd/Czech_Czech_003540.jpg"
+      "source_image": "samples_rdd/Czech_Czech_003540.jpg",
+      "match_status": "tp"
+    },
+    {
+      "label": "D20",
+      "score": 0.0,
+      "bbox": [
+        345.00030000000004,
+        479.00010000000003,
+        422.00010000000003,
+        534.9998999999999
+      ],
+      "id": 7,
+      "status": "needs_review",
+      "latitude": 47.056966448164225,
+      "longitude": 7.634134607997584,
+      "source_image": "samples_rdd/Czech_Czech_003571.jpg",
+      "match_status": "fn"
     },
     {
       "label": "D10",
       "score": 0.3826194405555725,
+      "calibrated_score": 0.3918801225200265,
       "bbox": [
         92.86588287353516,
         476.3768310546875,
         249.25067138671875,
         503.068359375
       ],
-      "id": 7,
+      "id": 8,
       "status": "needs_review",
-      "latitude": 47.056966448164225,
-      "longitude": 7.634134607997584,
-      "source_image": "samples_rdd/Czech_Czech_003584.jpg"
+      "latitude": 47.05506187581479,
+      "longitude": 7.638789733819504,
+      "source_image": "samples_rdd/Czech_Czech_003584.jpg",
+      "match_status": "fp"
+    },
+    {
+      "label": "D00",
+      "score": 0.0,
+      "bbox": [
+        331.0002,
+        451.9998,
+        373.00020000000006,
+        508.9998
+      ],
+      "id": 9,
+      "status": "needs_review",
+      "latitude": 47.056637472310605,
+      "longitude": 7.637849577710934,
+      "source_image": "samples_rdd/Czech_Czech_003584.jpg",
+      "match_status": "fn"
+    },
+    {
+      "label": "D40",
+      "score": 0.0,
+      "bbox": [
+        310.99979999999994,
+        419.0001,
+        340.9998,
+        453.0003
+      ],
+      "id": 10,
+      "status": "needs_review",
+      "latitude": 47.05599252414466,
+      "longitude": 7.6340941873454,
+      "source_image": "samples_rdd/Czech_Czech_003584.jpg",
+      "match_status": "fn"
     },
     {
       "label": "D00",
       "score": 0.45686212182044983,
+      "calibrated_score": 0.4603656425580021,
       "bbox": [
         386.0077209472656,
         522.5733642578125,
         691.7499389648438,
         719.3862915039062
       ],
-      "id": 8,
+      "id": 11,
       "status": "needs_review",
-      "latitude": 47.04906187581479,
-      "longitude": 7.624789532473856,
-      "source_image": "samples_rdd/India_India_009691.jpg"
+      "latitude": 47.04895982824843,
+      "longitude": 7.624359136438753,
+      "source_image": "samples_rdd/India_India_009691.jpg",
+      "match_status": "fp"
     },
     {
       "label": "D00",
       "score": 0.3228934705257416,
+      "calibrated_score": 0.3362389792950953,
       "bbox": [
         372.4385681152344,
         502.2519226074219,
         623.7120971679688,
         719.752685546875
       ],
-      "id": 9,
+      "id": 12,
       "status": "needs_review",
-      "latitude": 47.050637472310605,
-      "longitude": 7.623849482133161,
-      "source_image": "samples_rdd/India_India_009691.jpg"
+      "latitude": 47.04961011414787,
+      "longitude": 7.6256229465768754,
+      "source_image": "samples_rdd/India_India_009691.jpg",
+      "match_status": "fp"
+    },
+    {
+      "label": "D40",
+      "score": 0.0,
+      "bbox": [
+        439.99992,
+        645.00012,
+        617.99976,
+        720.00036
+      ],
+      "id": 13,
+      "status": "needs_review",
+      "latitude": 47.051740442286615,
+      "longitude": 7.62221623958459,
+      "source_image": "samples_rdd/India_India_009691.jpg",
+      "match_status": "fn"
+    },
+    {
+      "label": "D40",
+      "score": 0.0,
+      "bbox": [
+        508.99968,
+        554.0003999999999,
+        609.99984,
+        633.0002400000001
+      ],
+      "id": 14,
+      "status": "needs_review",
+      "latitude": 47.050227340233015,
+      "longitude": 7.6204527848719295,
+      "source_image": "samples_rdd/India_India_009691.jpg",
+      "match_status": "fn"
     },
     {
       "label": "D00",
       "score": 0.4692629873752594,
+      "calibrated_score": 0.471764761604663,
       "bbox": [
         134.88568115234375,
         453.1409912109375,
         251.4832305908203,
         719.2069091796875
       ],
-      "id": 10,
+      "id": 15,
       "status": "needs_review",
-      "latitude": 47.04999252414466,
-      "longitude": 7.620094514250288,
-      "source_image": "samples_rdd/India_India_009863.jpg"
+      "latitude": 47.05081878361399,
+      "longitude": 7.620659840656968,
+      "source_image": "samples_rdd/India_India_009863.jpg",
+      "match_status": "fp"
+    },
+    {
+      "label": "D40",
+      "score": 0.0,
+      "bbox": [
+        152.99964,
+        593.99964,
+        207.99972,
+        704.99988
+      ],
+      "id": 16,
+      "status": "needs_review",
+      "latitude": 47.05067673460148,
+      "longitude": 7.623930219150232,
+      "source_image": "samples_rdd/India_India_009863.jpg",
+      "match_status": "fn"
+    },
+    {
+      "label": "D40",
+      "score": 0.0,
+      "bbox": [
+        210.00024000000002,
+        431.00028,
+        257.00039999999996,
+        509.00003999999996
+      ],
+      "id": 17,
+      "status": "needs_review",
+      "latitude": 47.05020328109378,
+      "longitude": 7.625750532523877,
+      "source_image": "samples_rdd/India_India_009863.jpg",
+      "match_status": "fn"
     },
     {
       "label": "D40",
       "score": 0.7245006561279297,
+      "calibrated_score": 0.7084821475563579,
       "bbox": [
         414.5282287597656,
         516.8264770507812,
         458.7755432128906,
         542.45703125
       ],
-      "id": 11,
+      "id": 18,
       "status": "accepted",
-      "latitude": 47.04895982824843,
-      "longitude": 7.624359136438753,
-      "source_image": "samples_rdd/India_India_009864.jpg"
+      "latitude": 47.051071415794866,
+      "longitude": 7.624352145788025,
+      "source_image": "samples_rdd/India_India_009864.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D20",
       "score": 0.46458572149276733,
+      "calibrated_score": 0.4674660871823887,
       "bbox": [
         31.649002075195312,
         494.18365478515625,
         604.2841796875,
         663.1771240234375
       ],
-      "id": 12,
+      "id": 19,
       "status": "needs_review",
-      "latitude": 47.04961011414787,
-      "longitude": 7.6256229465768754,
-      "source_image": "samples_rdd/India_India_009864.jpg"
+      "latitude": 47.04975231394735,
+      "longitude": 7.622780306934236,
+      "source_image": "samples_rdd/India_India_009864.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.5355356335639954,
+      "calibrated_score": 0.532645456438272,
       "bbox": [
         126.35970306396484,
         393.00286865234375,
         227.48037719726562,
         574.1070556640625
       ],
-      "id": 13,
+      "id": 20,
       "status": "accepted",
-      "latitude": 47.065240442286616,
-      "longitude": 7.616716041132328,
-      "source_image": "samples_rdd/Japan_Japan_009952.jpg"
+      "latitude": 47.0632167980444,
+      "longitude": 7.61567270354918,
+      "source_image": "samples_rdd/Japan_Japan_009952.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.8273507952690125,
+      "calibrated_score": 0.8083219071652803,
       "bbox": [
         359.6048278808594,
         379.2672424316406,
         419.3804626464844,
         451.704345703125
       ],
-      "id": 14,
+      "id": 21,
       "status": "accepted",
-      "latitude": 47.063727340233015,
-      "longitude": 7.614952139903655,
-      "source_image": "samples_rdd/Japan_Japan_009955.jpg"
+      "latitude": 47.06342447183575,
+      "longitude": 7.6203224796680855,
+      "source_image": "samples_rdd/Japan_Japan_009955.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D20",
       "score": 0.8141745924949646,
+      "calibrated_score": 0.7952476428464527,
       "bbox": [
         0.0,
         355.6549987792969,
         262.5304870605469,
         599.7046508789062
       ],
-      "id": 15,
+      "id": 22,
       "status": "accepted",
-      "latitude": 47.06431878361399,
-      "longitude": 7.615159248116307,
-      "source_image": "samples_rdd/Japan_Japan_009963.jpg"
+      "latitude": 47.06319854390817,
+      "longitude": 7.617824916939498,
+      "source_image": "samples_rdd/Japan_Japan_009963.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D20",
       "score": 0.4963623881340027,
+      "calibrated_score": 0.49665911389723605,
       "bbox": [
         258.7413635253906,
         460.948486328125,
         434.2654113769531,
         507.9619445800781
       ],
-      "id": 16,
+      "id": 23,
       "status": "needs_review",
-      "latitude": 47.06417673460148,
-      "longitude": 7.618430454686615,
-      "source_image": "samples_rdd/Japan_Japan_009963.jpg"
+      "latitude": 47.06161028840705,
+      "longitude": 7.616364405559578,
+      "source_image": "samples_rdd/Japan_Japan_009963.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D20",
       "score": 0.3296375870704651,
+      "calibrated_score": 0.3425567008003882,
       "bbox": [
         512.216796875,
         364.5879821777344,
         599.85888671875,
         445.2218933105469
       ],
-      "id": 17,
+      "id": 24,
       "status": "needs_review",
-      "latitude": 47.06370328109378,
-      "longitude": 7.620251228973185,
-      "source_image": "samples_rdd/Japan_Japan_009963.jpg"
+      "latitude": 47.06510882261137,
+      "longitude": 7.6191378768249125,
+      "source_image": "samples_rdd/Japan_Japan_009963.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D10",
       "score": 0.6208855509757996,
+      "calibrated_score": 0.6113682910238046,
       "bbox": [
         435.01416015625,
         557.8458251953125,
         536.78271484375,
         601.532958984375
       ],
-      "id": 18,
+      "id": 25,
       "status": "accepted",
-      "latitude": 47.06707141579487,
-      "longitude": 7.633352551587653,
-      "source_image": "samples_rdd/United_States_United_States_004736.jpg"
+      "latitude": 47.064819437212144,
+      "longitude": 7.6297352913147245,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.46163806319236755,
+      "calibrated_score": 0.4647565687995679,
       "bbox": [
         272.64666748046875,
         416.07928466796875,
         291.31414794921875,
         469.54656982421875
       ],
-      "id": 19,
+      "id": 26,
       "status": "needs_review",
-      "latitude": 47.06575231394736,
-      "longitude": 7.631780241000987,
-      "source_image": "samples_rdd/United_States_United_States_004736.jpg"
+      "latitude": 47.0668045903707,
+      "longitude": 7.632557558768877,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "fp"
     },
     {
       "label": "D00",
       "score": 0.44906073808670044,
+      "calibrated_score": 0.4531906640212199,
       "bbox": [
         126.55918884277344,
         374.6165771484375,
         235.4138641357422,
         565.40771484375
       ],
-      "id": 20,
+      "id": 27,
       "status": "needs_review",
-      "latitude": 47.065716798044406,
-      "longitude": 7.630172617852347,
-      "source_image": "samples_rdd/United_States_United_States_004736.jpg"
+      "latitude": 47.064685090194615,
+      "longitude": 7.6343386136021305,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.38681915402412415,
+      "calibrated_score": 0.39577011204539575,
       "bbox": [
         374.3397521972656,
         565.160400390625,
         426.4288024902344,
         640.0
       ],
-      "id": 21,
+      "id": 28,
       "status": "needs_review",
-      "latitude": 47.06592447183576,
-      "longitude": 7.634822612037175,
-      "source_image": "samples_rdd/United_States_United_States_004736.jpg"
+      "latitude": 47.06435160198727,
+      "longitude": 7.633510362110745,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "fp"
+    },
+    {
+      "label": "D00",
+      "score": 0.0,
+      "bbox": [
+        281.99999999999994,
+        414.0,
+        402.99968,
+        617.00032
+      ],
+      "id": 29,
+      "status": "needs_review",
+      "latitude": 47.065845964699946,
+      "longitude": 7.629318894251312,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "fn"
+    },
+    {
+      "label": "D00",
+      "score": 0.0,
+      "bbox": [
+        43.00000000000001,
+        487.00032,
+        113.99968,
+        623.00032
+      ],
+      "id": 30,
+      "status": "needs_review",
+      "latitude": 47.06589358829241,
+      "longitude": 7.632195989786813,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "fn"
+    },
+    {
+      "label": "D00",
+      "score": 0.0,
+      "bbox": [
+        0.9999999999999964,
+        405.00032,
+        111.99968,
+        486.0
+      ],
+      "id": 31,
+      "status": "needs_review",
+      "latitude": 47.066299994966755,
+      "longitude": 7.6287920913567655,
+      "source_image": "samples_rdd/United_States_United_States_004736.jpg",
+      "match_status": "fn"
     },
     {
       "label": "D10",
       "score": 0.7679169178009033,
+      "calibrated_score": 0.7500681271214835,
       "bbox": [
         3.9613189697265625,
         563.770751953125,
         113.5140151977539,
         588.960205078125
       ],
-      "id": 22,
+      "id": 32,
       "status": "accepted",
-      "latitude": 47.06569854390818,
-      "longitude": 7.632324932177503,
-      "source_image": "samples_rdd/United_States_United_States_004778.jpg"
+      "latitude": 47.06721796520693,
+      "longitude": 7.629869243570662,
+      "source_image": "samples_rdd/United_States_United_States_004778.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D10",
       "score": 0.5875405073165894,
+      "calibrated_score": 0.5805290772751219,
       "bbox": [
         365.7357177734375,
         537.71435546875,
         518.2556762695312,
         561.975341796875
       ],
-      "id": 23,
+      "id": 33,
       "status": "accepted",
-      "latitude": 47.06411028840706,
-      "longitude": 7.630864352302293,
-      "source_image": "samples_rdd/United_States_United_States_004778.jpg"
+      "latitude": 47.066273094059,
+      "longitude": 7.630623253364148,
+      "source_image": "samples_rdd/United_States_United_States_004778.jpg",
+      "match_status": "tp"
+    },
+    {
+      "label": "D00",
+      "score": 0.0,
+      "bbox": [
+        309.0,
+        413.00000000000006,
+        318.00032,
+        439.0
+      ],
+      "id": 34,
+      "status": "needs_review",
+      "latitude": 47.06581685600919,
+      "longitude": 7.634557965262007,
+      "source_image": "samples_rdd/United_States_United_States_004778.jpg",
+      "match_status": "fn"
     },
     {
       "label": "D00",
       "score": 0.7708566784858704,
+      "calibrated_score": 0.7529099457626032,
       "bbox": [
         256.78643798828125,
         406.55950927734375,
         288.97137451171875,
         531.9813232421875
       ],
-      "id": 24,
+      "id": 35,
       "status": "accepted",
-      "latitude": 47.067608822611376,
-      "longitude": 7.633637953638314,
-      "source_image": "samples_rdd/United_States_United_States_004791.jpg"
+      "latitude": 47.06562254451183,
+      "longitude": 7.634190137544051,
+      "source_image": "samples_rdd/United_States_United_States_004791.jpg",
+      "match_status": "tp"
     },
     {
       "label": "D00",
       "score": 0.3852352201938629,
+      "calibrated_score": 0.3943032790589054,
       "bbox": [
         259.0538330078125,
         544.880615234375,
         300.6448974609375,
         640.0
       ],
-      "id": 25,
+      "id": 36,
       "status": "needs_review",
-      "latitude": 47.064819437212144,
-      "longitude": 7.6297352913147245,
-      "source_image": "samples_rdd/United_States_United_States_004791.jpg"
+      "latitude": 47.06692835375698,
+      "longitude": 7.629713241240521,
+      "source_image": "samples_rdd/United_States_United_States_004791.jpg",
+      "match_status": "fp"
     }
   ]
 }

@@ -19,6 +19,29 @@ const STATUS_COLORS: Record<DefectStatus, string> = {
   rejected: 'bg-rose-100 text-rose-700',
 };
 
+const MATCH_COPY: Record<NonNullable<Defect['matchStatus']>, { label: string; color: string; explain: string }> = {
+  truePositive: {
+    label: 'True positive',
+    color: 'bg-emerald-100 text-emerald-700',
+    explain: 'Model proposed this box and a labelled ground-truth box overlaps it at IoU ≥ 0.5.',
+  },
+  falsePositive: {
+    label: 'False positive',
+    color: 'bg-rose-100 text-rose-700',
+    explain: 'Model proposed this box but no ground-truth label matches. The model imagined it.',
+  },
+  falseNegative: {
+    label: 'False negative',
+    color: 'bg-slate-200 text-slate-700',
+    explain: 'A labelled ground-truth box the model failed to propose. Counts against recall.',
+  },
+  unknown: {
+    label: 'No ground truth',
+    color: 'bg-slate-100 text-slate-500',
+    explain: 'No labelled box for this image — production case.',
+  },
+};
+
 export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetailsProps) {
   const isModel = defect.source === 'model';
 
@@ -70,6 +93,13 @@ export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetails
               {(defect.confidence * 100).toFixed(0)}%
             </span>
           </Field>
+          {defect.matchStatus && defect.matchStatus !== 'unknown' && (
+            <Field label="Ground truth">
+              <span className={`${MATCH_COPY[defect.matchStatus].color} px-2 py-0.5 rounded text-xs font-medium`}>
+                {MATCH_COPY[defect.matchStatus].label}
+              </span>
+            </Field>
+          )}
           <Field label="Detected">
             <span className="text-slate-700">
               {new Date(defect.timestamp).toLocaleString()}
@@ -87,8 +117,8 @@ export function DefectDetails({ defect, onClose, onUpdateStatus }: DefectDetails
 
         <div className="rounded-lg bg-slate-50 p-4 text-xs text-slate-600">
           {isModel
-            ? 'Automatic detection from Mask R-CNN. Confirm to keep; reject to mark as false positive. Scores are raw softmax, not calibrated probabilities.'
-            : 'Review this automated detection. Confirming flags it for maintenance; rejecting marks it as a false positive.'}
+            ? 'YOLO11m fine-tuned on RDD2022. Raw scores are uncalibrated; the calibrated p(real) applies a temperature scalar learned on the test set. Confirm or reject as a reviewer.'
+            : 'Review this detection. Confirming flags it for maintenance; rejecting marks it as a false positive.'}
         </div>
       </div>
 
@@ -135,7 +165,7 @@ function ModelSection({ defect }: { defect: Defect }) {
           {defect.modelLabel && (
             <div>
               <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">
-                COCO label
+                RDD2022 class
               </p>
               <p className="font-mono text-slate-800">{defect.modelLabel}</p>
             </div>
@@ -148,6 +178,24 @@ function ModelSection({ defect }: { defect: Defect }) {
               <p className="font-mono text-slate-800 tabular-nums">
                 {defect.modelScore.toFixed(3)}
               </p>
+            </div>
+          )}
+          {defect.calibratedScore !== undefined && (
+            <div>
+              <p className="font-semibold text-slate-500 uppercase tracking-wide text-[10px]">
+                Calibrated p(real)
+              </p>
+              <p className="font-mono text-slate-800 tabular-nums">
+                {defect.calibratedScore.toFixed(3)}
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">
+                temperature-scaled on the test set
+              </p>
+            </div>
+          )}
+          {defect.matchStatus && defect.matchStatus !== 'unknown' && (
+            <div className="col-span-2 rounded bg-slate-50 px-3 py-2 text-[11px] text-slate-600">
+              {MATCH_COPY[defect.matchStatus].explain}
             </div>
           )}
         </div>
